@@ -1,0 +1,17 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-https://api.viin.app}
+    container_name: viin_web
+    restart: unless-stopped
+    ports:
+      - "3090:80"
+    networks:
+      - caddy
+
+networks:
+  caddy:
+    external: true
