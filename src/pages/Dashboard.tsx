@@ -1,0 +1,30 @@
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { DashboardLayout } from '../components/DashboardLayout';
+import { Overview } from './dashboard/Overview';
+import { ProfileSettings } from './dashboard/ProfileSettings';
+import { Tasks } from './dashboard/Tasks';
+import { Agents } from './dashboard/Agents';
+import { Notifications } from './dashboard/Notifications';
+import { Memory } from './dashboard/Memory';
+import { Briefings } from './dashboard/Briefings';
+import { Subscription } from './dashboard/Subscription';
+import { Integrations } from './dashboard/Integrations';
+
+export function Dashboard() {
+  return (
+    <Routes>
+      <Route element={<DashboardLayout />}>
+        <Route index element={<Overview />} />
+        <Route path="profile" element={<ProfileSettings />} />
+        <Route path="tasks" element={<Tasks />} />
+        <Route path="agents" element={<Agents />} />
+        <Route path="notifications" element={<Notifications />} />
+        <Route path="memory" element={<Memory />} />
+        <Route path="briefings" element={<Briefings />} />
+        <Route path="subscription" element={<Subscription />} />
+        <Route path="integrations" element={<Integrations />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Route>
+    </Routes>
+  );
+}

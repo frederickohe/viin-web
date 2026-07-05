@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { type FormEvent, useEffect, useRef, useState } from 'react';
 import { api, ApiError } from '../api/client';
 import { useAuth } from '../context/AuthContext';
@@ -6,7 +7,10 @@ interface Message {
   id: string;
   role: 'user' | 'assistant';
   text: string;
+  isReminder?: boolean;
 }
+
+const REMINDER_POLL_MS = 20_000;
 
 export function Chat() {
   const { user } = useAuth();
@@ -21,10 +25,61 @@ export function Chat() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
+  const lastSeenRef = useRef<string>('');
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  useEffect(() => {
+    if (!user?.phone) return;
+
+    if (!lastSeenRef.current) {
+      lastSeenRef.current = new Date().toISOString();
+    }
+
+    let cancelled = false;
+
+    const phone = user.phone;
+
+    async function pollReminders() {
+      if (cancelled || sending || !phone) return;
+      try {
+        const res = await api.getChatUpdates(phone, lastSeenRef.current || undefined);
+        const incoming = res.messages || [];
+        if (!incoming.length) return;
+
+        setMessages((prev) => {
+          const existingTexts = new Set(prev.map((m) => m.text));
+          const additions = incoming
+            .filter((m) => m.content && !existingTexts.has(m.content))
+            .map((m) => ({
+              id: crypto.randomUUID(),
+              role: 'assistant' as const,
+              text: m.content,
+              isReminder: m.type === 'reminder',
+            }));
+          return additions.length ? [...prev, ...additions] : prev;
+        });
+
+        const latest = incoming
+          .map((m) => m.timestamp)
+          .filter(Boolean)
+          .sort()
+          .at(-1);
+        if (latest) lastSeenRef.current = latest;
+      } catch {
+        /* polling is best-effort */
+      }
+    }
+
+    pollReminders();
+    const timer = window.setInterval(pollReminders, REMINDER_POLL_MS);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
+  }, [user?.phone, sending]);
 
   async function handleSend(e: FormEvent) {
     e.preventDefault();
@@ -48,6 +103,7 @@ export function Chat() {
         ...prev,
         { id: crypto.randomUUID(), role: 'assistant', text: reply },
       ]);
+      lastSeenRef.current = new Date().toISOString();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Failed to send message.');
     } finally {
@@ -59,7 +115,9 @@ export function Chat() {
     return (
       <div className="chat-missing-phone">
         <p>Your account needs a phone number to use the assistant.</p>
-        <p>Please contact support or update your profile in the app.</p>
+        <p>
+          <Link to="/dashboard/profile">Add your phone in the dashboard</Link> to get started.
+        </p>
       </div>
     );
   }
@@ -73,7 +131,10 @@ export function Chat() {
 
       <div className="chat-messages">
         {messages.map((msg) => (
-          <div key={msg.id} className={`chat-bubble chat-bubble--${msg.role}`}>
+          <div
+            key={msg.id}
+            className={`chat-bubble chat-bubble--${msg.role}${msg.isReminder ? ' chat-bubble--reminder' : ''}`}
+          >
             {msg.text}
           </div>
         ))}

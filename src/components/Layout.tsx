@@ -5,9 +5,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const { token, user, signOut } = useAuth();
   const location = useLocation();
   const isChat = location.pathname === '/chat';
+  const isDashboard = location.pathname.startsWith('/dashboard');
 
   return (
-    <div className={`app-shell ${isChat ? 'app-shell--chat' : ''}`}>
+    <div className={`app-shell${isChat ? ' app-shell--chat' : ''}${isDashboard ? ' app-shell--dashboard' : ''}`}>
       <header className="site-header">
         <Link to="/" className="brand">
           <span className="brand-mark">V</span>
@@ -16,6 +17,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <nav className="site-nav">
           {token ? (
             <>
+              <Link to="/dashboard" className="nav-link">
+                Dashboard
+              </Link>
               <Link to="/chat" className="nav-link">
                 Assistant
               </Link>
@@ -37,7 +41,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </nav>
       </header>
       <main className="site-main">{children}</main>
-      {!isChat && (
+      {!isChat && !isDashboard && (
         <footer className="site-footer">
           <p>© {new Date().getFullYear()} Viin · task.viin.app</p>
         </footer>

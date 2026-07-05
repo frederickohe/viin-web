@@ -30,7 +30,36 @@ export interface UserProfile {
   email: string;
   phone?: string;
   company?: string;
+  occupation?: string;
+  organization_workplace?: string;
+  location?: string;
+  address?: string;
+  whatsapp_number?: string;
+  linkedin_url?: string;
+  profile_picture_url?: string;
+  profile_sharing?: boolean;
+  in_app_notification?: boolean;
+  sms_notification?: boolean;
   enabled: boolean;
+  status?: string;
+}
+
+export interface UserUpdatePayload {
+  fullname?: string;
+  phone?: string;
+  company?: string;
+  occupation?: string;
+  organization_workplace?: string;
+  location?: string;
+  address?: string;
+  whatsapp_number?: string;
+  linkedin_url?: string;
+  profile_sharing?: boolean;
+}
+
+export interface NotificationSettingsPayload {
+  in_app_notification?: boolean;
+  sms_notification?: boolean;
 }
 
 export interface Plan {
@@ -43,9 +72,115 @@ export interface Plan {
   is_active?: boolean;
 }
 
+export interface SubscriptionStatus {
+  has_active_subscription: boolean;
+  subscription_id?: number;
+  plan_id?: number;
+  plan_name?: string;
+  plan_price?: number;
+  features?: string[];
+  agents?: string[];
+  amount_paid?: number;
+  expires_at?: string;
+  days_remaining: number;
+  status: string;
+}
+
+export interface AgentConfig {
+  params?: Record<string, string>;
+  status?: string;
+}
+
+export interface UserAgents {
+  agents: Record<string, AgentConfig>;
+  available_agents: string[];
+}
+
+export interface Reminder {
+  id: string;
+  owner_user_id: string;
+  title?: string;
+  body: string;
+  due_at: string;
+  timezone?: string;
+  rrule?: string;
+  status: string;
+  delivery: Record<string, unknown>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MemoryListItem {
+  id: string;
+  list_id: string;
+  position: number;
+  text: string;
+  completed_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MemoryList {
+  id: string;
+  owner_user_id: string;
+  name: string;
+  description?: string;
+  created_at: string;
+  updated_at: string;
+  items: MemoryListItem[];
+}
+
+export interface MemoryItem {
+  id: string;
+  owner_user_id: string;
+  item_type: string;
+  title?: string;
+  text?: string;
+  url?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Briefing {
+  period: string;
+  body: string;
+  item_count: number;
+}
+
 export interface ChatResponse {
   response: string;
   success: boolean;
+}
+
+export interface ChatUpdateMessage {
+  role: 'assistant';
+  content: string;
+  timestamp?: string;
+  type?: string;
+  reminder_id?: string;
+}
+
+export interface ChatUpdatesResponse {
+  user_id: string;
+  messages: ChatUpdateMessage[];
+  success: boolean;
+}
+
+export interface GoogleCalendarStatus {
+  connected: boolean;
+  google_account_email?: string;
+  calendar_id?: string;
+  reminder_lead_minutes: number;
+  last_synced_at?: string;
+  last_sync_error?: string;
+  enabled: boolean;
+}
+
+export interface GoogleCalendarSyncResult {
+  synced_events: number;
+  reminders_created: number;
+  reminders_updated: number;
+  reminders_cancelled: number;
 }
 
 class ApiError extends Error {
@@ -129,14 +264,126 @@ export const api = {
   getMe: (token: string) =>
     request<UserProfile>('/api/v1/user/me', {}, token),
 
+  updateMe: (token: string, payload: UserUpdatePayload) =>
+    request<UserProfile>('/api/v1/user/me', {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }, token),
+
+  updateNotificationSettings: (token: string, payload: NotificationSettingsPayload) =>
+    request<UserProfile>('/api/v1/user/me/notification-settings', {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }, token),
+
+  getAgents: (token: string) =>
+    request<UserAgents>('/api/v1/user/me/agents', {}, token),
+
+  updateAgent: (token: string, agentName: string, params: Record<string, string>, status?: string) =>
+    request<UserAgents>(`/api/v1/user/me/agents/${agentName}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ params, status }),
+    }, token),
+
   getPlans: () =>
     request<{ success: boolean; plans: Plan[] }>('/api/v1/subscription/plans'),
+
+  getSubscription: (token: string) =>
+    request<SubscriptionStatus>('/api/v1/subscription/me', {}, token),
+
+  getReminders: (token: string, status?: string) => {
+    const params = status ? `?status=${status}` : '';
+    return request<Reminder[]>(`/api/v1/memory/reminders${params}`, {}, token);
+  },
+
+  createReminder: (token: string, payload: {
+    body: string;
+    due_at: string;
+    title?: string;
+    rrule?: string;
+    delivery?: Record<string, unknown>;
+  }) =>
+    request<Reminder>('/api/v1/memory/reminders', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }, token),
+
+  cancelReminder: (token: string, reminderId: string) =>
+    request<Reminder>(`/api/v1/memory/reminders/${reminderId}/cancel`, {
+      method: 'PATCH',
+    }, token),
+
+  getLists: (token: string) =>
+    request<MemoryList[]>('/api/v1/memory/lists', {}, token),
+
+  createList: (token: string, name: string, description?: string) =>
+    request<MemoryList>('/api/v1/memory/lists', {
+      method: 'POST',
+      body: JSON.stringify({ name, description }),
+    }, token),
+
+  addListItem: (token: string, listId: string, text: string) =>
+    request<MemoryListItem>(`/api/v1/memory/lists/${listId}/items`, {
+      method: 'POST',
+      body: JSON.stringify({ text }),
+    }, token),
+
+  completeListItem: (token: string, listId: string, itemId: string) =>
+    request<MemoryListItem>(`/api/v1/memory/lists/${listId}/items/${itemId}/complete`, {
+      method: 'PATCH',
+    }, token),
+
+  getMemoryItems: (token: string) =>
+    request<MemoryItem[]>('/api/v1/memory/items', {}, token),
+
+  createMemoryItem: (token: string, payload: { item_type: string; title?: string; text?: string }) =>
+    request<MemoryItem>('/api/v1/memory/items', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }, token),
+
+  deleteMemoryItem: (token: string, itemId: string) =>
+    request(`/api/v1/memory/items/${itemId}`, { method: 'DELETE' }, token),
+
+  getDailyBriefing: (token: string) =>
+    request<Briefing>('/api/v1/memory/briefing/daily', {}, token),
+
+  getWeeklyBriefing: (token: string) =>
+    request<Briefing>('/api/v1/memory/briefing/weekly', {}, token),
 
   sendMessage: (phone: string, message: string) =>
     request<ChatResponse>('/api/v1/nlu/process', {
       method: 'POST',
       body: JSON.stringify({ phone, message }),
     }),
+
+  getChatUpdates: (phone: string, since?: string) => {
+    const params = new URLSearchParams({ phone });
+    if (since) params.set('since', since);
+    return request<ChatUpdatesResponse>(`/api/v1/nlu/chat-updates?${params.toString()}`);
+  },
+
+  getGoogleCalendarStatus: (token: string) =>
+    request<GoogleCalendarStatus>('/api/v1/integrations/google-calendar/status', {}, token),
+
+  getGoogleCalendarConnectUrl: (token: string) =>
+    request<{ authorization_url: string }>('/api/v1/integrations/google-calendar/connect', {}, token),
+
+  updateGoogleCalendarSettings: (token: string, payload: { reminder_lead_minutes?: number }) =>
+    request<GoogleCalendarStatus>('/api/v1/integrations/google-calendar/settings', {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+    }, token),
+
+  syncGoogleCalendar: (token: string) =>
+    request<GoogleCalendarSyncResult>('/api/v1/integrations/google-calendar/sync', {
+      method: 'POST',
+    }, token),
+
+  disconnectGoogleCalendar: (token: string) =>
+    request<{ message: string }>('/api/v1/integrations/google-calendar/disconnect', {
+      method: 'DELETE',
+    }, token),
 
   signOut: (token: string) =>
     request('/api/v1/auth/signout', { method: 'POST' }, token),

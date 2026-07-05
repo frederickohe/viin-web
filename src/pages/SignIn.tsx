@@ -23,7 +23,7 @@ export function SignIn() {
         String(form.get('email') || '').trim(),
         String(form.get('password') || ''),
       );
-      navigate('/chat');
+      navigate('/dashboard');
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Invalid email or password.');
     } finally {
