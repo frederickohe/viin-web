@@ -21,8 +21,6 @@ export function SignUp() {
         email: String(form.get('email') || '').trim(),
         phone,
         password: String(form.get('password') || ''),
-        ghana_card: String(form.get('ghana_card') || '').trim(),
-        company: String(form.get('company') || '').trim() || undefined,
       });
       navigate('/verify', { state: { phone } });
     } catch (err) {
@@ -60,19 +58,6 @@ export function SignUp() {
               pattern="[0-9]{10,15}"
               title="10–15 digit phone number"
             />
-          </label>
-          <label>
-            Ghana Card ID
-            <input
-              name="ghana_card"
-              required
-              placeholder="GHA-XXXXXXXXX-X"
-              minLength={3}
-            />
-          </label>
-          <label>
-            Company <span className="optional">(optional)</span>
-            <input name="company" placeholder="Your business name" />
           </label>
           <label>
             Password

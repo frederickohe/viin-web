@@ -5,8 +5,6 @@ export interface SignUpPayload {
   email: string;
   phone: string;
   password: string;
-  ghana_card: string;
-  company?: string;
 }
 
 export interface SignUpResponse {
