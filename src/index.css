@@ -1044,6 +1044,20 @@ a:hover {
   margin-bottom: 0.75rem;
 }
 
+.channel-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.channel-row p {
+  margin: 0.25rem 0 0;
+}
+
 .dash-toggle {
   display: flex;
   align-items: center;

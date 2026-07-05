@@ -1,12 +1,14 @@
-import { type FormEvent, useEffect, useState } from 'react';
+import { type FormEvent, useCallback, useEffect, useState } from 'react';
 import { api, ApiError } from '../../api/client';
 import { useAuth } from '../../context/AuthContext';
 
 export function ProfileSettings() {
   const { token, user, refreshUser } = useAuth();
   const [saving, setSaving] = useState(false);
+  const [disconnecting, setDisconnecting] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [telegramConnected, setTelegramConnected] = useState(false);
   const [form, setForm] = useState({
     fullname: '',
     phone: '',
@@ -36,6 +38,20 @@ export function ProfileSettings() {
     });
   }, [user]);
 
+  const loadChatChannels = useCallback(async () => {
+    if (!token) return;
+    try {
+      const channels = await api.getChatChannels(token);
+      setTelegramConnected(channels.telegram.connected);
+    } catch {
+      /* channel status is optional UI */
+    }
+  }, [token]);
+
+  useEffect(() => {
+    loadChatChannels();
+  }, [loadChatChannels]);
+
   function update(field: keyof typeof form, value: string | boolean) {
     setForm((f) => ({ ...f, [field]: value }));
   }
@@ -54,6 +70,27 @@ export function ProfileSettings() {
       setError(err instanceof ApiError ? err.message : 'Failed to save');
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleDisconnectTelegram() {
+    if (!token || !telegramConnected) return;
+    const confirmed = window.confirm(
+      'Disconnect Telegram from your Viin account? You can reconnect anytime by sending the link command in Telegram.',
+    );
+    if (!confirmed) return;
+
+    setDisconnecting(true);
+    setError('');
+    setSuccess('');
+    try {
+      const result = await api.disconnectTelegram(token);
+      setTelegramConnected(false);
+      setSuccess(result.message);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.message : 'Could not disconnect Telegram.');
+    } finally {
+      setDisconnecting(false);
     }
   }
 
@@ -115,6 +152,26 @@ export function ProfileSettings() {
 
         <fieldset className="dash-fieldset">
           <legend>Channels</legend>
+          <div className="channel-row">
+            <div>
+              <strong>Telegram</strong>
+              <p className="dash-muted">
+                {telegramConnected
+                  ? 'Connected — Viin can message you on Telegram.'
+                  : 'Not connected — send "link" plus your Viin phone number in the Telegram bot to connect.'}
+              </p>
+            </div>
+            {telegramConnected && (
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                onClick={handleDisconnectTelegram}
+                disabled={disconnecting}
+              >
+                {disconnecting ? 'Disconnecting…' : 'Disconnect Telegram'}
+              </button>
+            )}
+          </div>
           <label>
             WhatsApp number
             <input value={form.whatsapp_number} onChange={(e) => update('whatsapp_number', e.target.value)} />

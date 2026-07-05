@@ -94,6 +94,13 @@ export interface UserAgents {
   available_agents: string[];
 }
 
+export interface ChatChannels {
+  telegram: {
+    connected: boolean;
+    chat_id?: string | null;
+  };
+}
+
 export interface Reminder {
   id: string;
   owner_user_id: string;
@@ -287,6 +294,14 @@ export const api = {
     request<UserAgents>(`/api/v1/user/me/agents/${agentName}`, {
       method: 'PATCH',
       body: JSON.stringify({ params, status }),
+    }, token),
+
+  getChatChannels: (token: string) =>
+    request<ChatChannels>('/api/v1/user/me/chat-channels', {}, token),
+
+  disconnectTelegram: (token: string) =>
+    request<{ message: string }>('/api/v1/user/me/chat-channels/telegram', {
+      method: 'DELETE',
     }, token),
 
   getPlans: () =>
