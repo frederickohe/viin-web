@@ -39,7 +39,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <main className="site-main">{children}</main>
       {!isChat && (
         <footer className="site-footer">
-          <p>© {new Date().getFullYear()} Viin · viin.app</p>
+          <p>© {new Date().getFullYear()} Viin · task.viin.app</p>
         </footer>
       )}
     </div>
