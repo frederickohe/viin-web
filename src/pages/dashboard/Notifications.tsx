@@ -56,7 +56,7 @@ export function Notifications() {
           <label className="dash-toggle dash-toggle--card">
             <div>
               <strong>In-app & chat notifications</strong>
-              <p className="dash-muted">Receive reminders and updates in the web assistant and connected channels.</p>
+              <p className="dash-muted">Receive reminders and updates in chat and connected channels.</p>
             </div>
             <input
               type="checkbox"
@@ -92,7 +92,7 @@ export function Notifications() {
           above, include <code>sms</code> in the delivery channels for text alerts.
         </p>
         <ul className="dash-bullets">
-          <li><strong>chat</strong> — Web assistant, Telegram, WhatsApp</li>
+          <li><strong>chat</strong> — Web chat, Telegram, WhatsApp</li>
           <li><strong>sms</strong> — Text message (requires SMS notifications on)</li>
         </ul>
       </section>

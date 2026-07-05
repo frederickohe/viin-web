@@ -49,7 +49,7 @@ export function ProfileSettings() {
     try {
       await api.updateMe(token, form);
       await refreshUser();
-      setSuccess('Profile updated. Your assistant will use this context in conversations.');
+      setSuccess('Profile updated. Your task assistant will use this context in conversations.');
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Failed to save');
     } finally {

@@ -21,7 +21,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 Dashboard
               </Link>
               <Link to="/chat" className="nav-link">
-                Assistant
+                Chat
               </Link>
               <span className="nav-user">{user?.fullname?.split(' ')[0]}</span>
               <button type="button" className="btn btn-ghost" onClick={() => signOut()}>

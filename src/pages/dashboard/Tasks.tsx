@@ -124,7 +124,7 @@ export function Tasks() {
     <div className="dash-page">
       <header className="dash-header">
         <h1>Tasks & reminders</h1>
-        <p>Create deadlines, recurring reminders, and open todo lists for your assistant.</p>
+        <p>Create deadlines, recurring reminders, and open todo lists for your task assistant.</p>
       </header>
 
       {error && <div className="alert alert-error">{error}</div>}

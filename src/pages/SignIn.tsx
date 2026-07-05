@@ -35,7 +35,7 @@ export function SignIn() {
     <div className="auth-page">
       <div className="auth-card">
         <h1>Welcome back</h1>
-        <p className="auth-sub">Sign in to continue with Viin.</p>
+        <p className="auth-sub">Sign in to your personal task assistant.</p>
 
         {verified && (
           <div className="alert alert-info">Phone verified! You can sign in now.</div>

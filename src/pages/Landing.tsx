@@ -4,16 +4,16 @@ import { api, type Plan } from '../api/client';
 
 const FEATURES = [
   {
-    title: 'Natural conversations',
-    desc: 'Ask questions, get tasks done, and manage your day in plain language.',
+    title: 'Tasks & reminders',
+    desc: 'Tell Viin what needs doing — deadlines, recurring reminders, and open todo lists, all in plain language.',
   },
   {
-    title: 'Business-ready',
-    desc: 'Email, reminders, expense tracking, and customer support — all in one assistant.',
+    title: 'Daily briefings',
+    desc: 'Wake up to a summary of what\'s ahead. Viin tracks your priorities and keeps you on schedule.',
   },
   {
-    title: 'Always learning',
-    desc: 'Upload documents and let Viin answer questions using your own knowledge base.',
+    title: 'Remembers you',
+    desc: 'Store notes and preferences Viin recalls in conversations, briefings, and reminders.',
   },
 ];
 
@@ -31,23 +31,25 @@ export function Landing() {
     <>
       <section className="hero">
         <div className="hero-glow" />
-        <p className="eyebrow">Your AI assistant, shared with the world</p>
-        <h1>
-          Meet <em>Viin</em>
-          <br />
-          intelligence that works for you
-        </h1>
-        <p className="hero-lead">
-          Sign up in minutes and start chatting with a powerful AI assistant built for
-          productivity, business, and everyday life.
-        </p>
-        <div className="hero-actions">
-          <Link to="/signup" className="btn btn-primary btn-lg">
-            Create free account
-          </Link>
-          <Link to="/signin" className="btn btn-outline btn-lg">
-            I have an account
-          </Link>
+        <div className="hero-panel">
+          <p className="eyebrow">Your personal task assistant</p>
+          <h1>
+            Meet <em>Viin</em>
+            <br />
+            stay on top of your day
+          </h1>
+          <p className="hero-lead">
+            Sign up in minutes and let Viin manage your tasks, reminders, and daily
+            priorities — so you can focus on what matters.
+          </p>
+          <div className="hero-actions">
+            <Link to="/signup" className="btn btn-primary btn-lg">
+              Create free account
+            </Link>
+            <Link to="/signin" className="btn btn-outline btn-lg">
+              I have an account
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -87,8 +89,8 @@ export function Landing() {
       )}
 
       <section className="cta-band">
-        <h2>Ready to try Viin?</h2>
-        <p>Join others using your AI assistant today.</p>
+        <h2>Ready to simplify your day?</h2>
+        <p>Join others who trust Viin as their personal task assistant.</p>
         <Link to="/signup" className="btn btn-primary btn-lg">
           Sign up free
         </Link>

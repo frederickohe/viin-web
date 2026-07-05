@@ -36,7 +36,7 @@ export function SignUp() {
     <div className="auth-page">
       <div className="auth-card">
         <h1>Create your account</h1>
-        <p className="auth-sub">Start using Viin in a few steps.</p>
+        <p className="auth-sub">Set up your personal task assistant in a few steps.</p>
 
         {error && <div className="alert alert-error">{error}</div>}
 

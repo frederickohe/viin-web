@@ -12,7 +12,7 @@ const AGENT_LABELS: Record<string, string> = {
 };
 
 const AGENT_DESCRIPTIONS: Record<string, string> = {
-  config_agent: 'Manages your assistant settings and preferences.',
+  config_agent: 'Manages your task assistant settings and preferences.',
   email_agent: 'Sends emails on your behalf. Requires a sender email address.',
   chatbot_agent: 'Handles conversational responses across channels.',
   image_generation_agent: 'Creates images from your prompts.',
@@ -120,7 +120,7 @@ export function Agents() {
                     {!entitled ? 'Not in plan' : isActive ? 'Active' : 'Not configured'}
                   </span>
                 </div>
-                <p className="dash-muted">{AGENT_DESCRIPTIONS[name] || 'Specialized assistant capability.'}</p>
+                <p className="dash-muted">{AGENT_DESCRIPTIONS[name] || 'Specialized task capability.'}</p>
 
                 {cfg?.params && Object.keys(cfg.params).length > 0 && editing !== name && (
                   <dl className="dash-dl dash-dl--compact">

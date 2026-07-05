@@ -80,7 +80,7 @@ export function Overview() {
               Configure agents
             </Link>
             <Link to="/chat" className="btn btn-primary btn-sm">
-              Open assistant chat
+              Open task chat
             </Link>
           </div>
         </section>
@@ -100,7 +100,7 @@ export function Overview() {
         </section>
 
         <section className="dash-card">
-          <h3>Assistant context</h3>
+          <h3>Your context</h3>
           <dl className="dash-dl">
             <div>
               <dt>Company</dt>

@@ -18,7 +18,7 @@ export function Chat() {
     {
       id: 'welcome',
       role: 'assistant',
-      text: `Hi${user?.fullname ? ` ${user.fullname.split(' ')[0]}` : ''}! I'm Viin, your AI assistant. What can I help you with today?`,
+      text: `Hi${user?.fullname ? ` ${user.fullname.split(' ')[0]}` : ''}! I'm Viin, your personal task assistant. What should we tackle today?`,
     },
   ]);
   const [input, setInput] = useState('');
@@ -116,7 +116,7 @@ export function Chat() {
   if (!user?.phone) {
     return (
       <div className="chat-missing-phone">
-        <p>Your account needs a phone number to use the assistant.</p>
+        <p>Your account needs a phone number to use your task assistant.</p>
         <p>
           <Link to="/dashboard/profile">Add your phone in the dashboard</Link> to get started.
         </p>
@@ -127,7 +127,7 @@ export function Chat() {
   return (
     <div className="chat-layout">
       <div className="chat-header">
-        <h2>Viin Assistant</h2>
+        <h2>Your task assistant</h2>
         <span className="chat-status">{sending ? 'Thinking…' : 'Online'}</span>
       </div>
 
@@ -156,7 +156,7 @@ export function Chat() {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask Viin anything…"
+          placeholder="Add a task, set a reminder, or ask anything…"
           disabled={sending}
           maxLength={1000}
         />

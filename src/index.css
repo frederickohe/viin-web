@@ -15,6 +15,12 @@
   --radius: 12px;
   --font: 'DM Sans', system-ui, sans-serif;
   --font-display: 'Instrument Serif', Georgia, serif;
+  --glass-bg: rgba(28, 25, 21, 0.55);
+  --glass-bg-light: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-subtle: rgba(255, 255, 255, 0.06);
+  --glass-blur: 16px;
+  --glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
 }
 
 *,
@@ -32,7 +38,12 @@ body,
 body {
   margin: 0;
   font-family: var(--font);
-  background: var(--bg);
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 120% 80% at 50% -30%, rgba(212, 168, 83, 0.14), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 90% 20%, rgba(212, 168, 83, 0.07), transparent 45%),
+    radial-gradient(ellipse 70% 50% at 10% 90%, rgba(93, 154, 232, 0.05), transparent 45%);
+  background-attachment: fixed;
   color: var(--text);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -68,9 +79,11 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  background: rgba(12, 11, 9, 0.85);
-  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--glass-border-subtle);
+  background: rgba(12, 11, 9, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -130,7 +143,10 @@ a:hover {
   padding: 2rem;
   color: var(--text-muted);
   font-size: 0.85rem;
-  border-top: 1px solid var(--border);
+  border-top: 1px solid var(--glass-border-subtle);
+  background: rgba(12, 11, 9, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .page-center {
@@ -243,6 +259,19 @@ a:hover {
   pointer-events: none;
 }
 
+.hero-panel {
+  position: relative;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: calc(var(--radius) * 1.5);
+  box-shadow: var(--glass-shadow);
+}
+
 .eyebrow {
   position: relative;
   color: var(--gold);
@@ -293,10 +322,19 @@ a:hover {
 }
 
 .feature-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   padding: 1.5rem;
+  box-shadow: var(--glass-shadow);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.feature-card:hover {
+  border-color: rgba(212, 168, 83, 0.25);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .feature-card h3 {
@@ -330,10 +368,13 @@ a:hover {
 }
 
 .plan-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   padding: 1.75rem;
+  box-shadow: var(--glass-shadow);
 }
 
 .plan-card h3 {
@@ -369,10 +410,13 @@ a:hover {
 .cta-band {
   text-align: center;
   padding: 3rem 1.5rem;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
   border-radius: calc(var(--radius) * 1.5);
   margin-bottom: 2rem;
+  box-shadow: var(--glass-shadow);
 }
 
 .cta-band p {
@@ -391,10 +435,13 @@ a:hover {
 .auth-card {
   width: 100%;
   max-width: 420px;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
   border-radius: calc(var(--radius) * 1.25);
   padding: 2rem;
+  box-shadow: var(--glass-shadow);
 }
 
 .auth-card h1 {
@@ -428,8 +475,10 @@ a:hover {
 .auth-form input {
   padding: 0.7rem 0.9rem;
   border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--bg);
+  border: 1px solid var(--glass-border);
+  background: rgba(12, 11, 9, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--text);
   font-family: inherit;
   font-size: 1rem;
@@ -479,9 +528,12 @@ a:hover {
 .integration-panel {
   margin-top: 1.5rem;
   padding: 1.25rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
-  background: var(--bg-elevated);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
 }
 
 .integration-panel__header {
@@ -546,7 +598,10 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--glass-border-subtle);
+  background: rgba(12, 11, 9, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .chat-header h2 {
@@ -588,14 +643,19 @@ a:hover {
 
 .chat-bubble--assistant {
   align-self: flex-start;
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
   border-bottom-left-radius: 4px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
 }
 
 .chat-bubble--reminder {
-  border-color: #c9a227;
-  background: rgba(201, 162, 39, 0.08);
+  border-color: rgba(201, 162, 39, 0.4);
+  background: rgba(201, 162, 39, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .chat-bubble--typing {
@@ -641,16 +701,20 @@ a:hover {
   display: flex;
   gap: 0.75rem;
   padding: 1rem 1.25rem;
-  border-top: 1px solid var(--border);
-  background: var(--bg-elevated);
+  border-top: 1px solid var(--glass-border-subtle);
+  background: rgba(22, 20, 17, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .chat-input-bar input {
   flex: 1;
   padding: 0.75rem 1rem;
   border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--bg);
+  border: 1px solid var(--glass-border);
+  background: rgba(12, 11, 9, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--text);
   font-family: inherit;
   font-size: 1rem;
@@ -674,6 +738,11 @@ a:hover {
 
   .hero {
     padding: 3rem 0 2.5rem;
+  }
+
+  .hero-panel {
+    padding: 2rem 1.25rem;
+    margin: 0 0.5rem;
   }
 
   .hero-actions {
@@ -703,8 +772,10 @@ a:hover {
 .dashboard-sidebar {
   width: 240px;
   flex-shrink: 0;
-  background: var(--bg-elevated);
-  border-right: 1px solid var(--border);
+  background: rgba(22, 20, 17, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-right: 1px solid var(--glass-border-subtle);
   display: flex;
   flex-direction: column;
   padding: 1.5rem 0;
@@ -796,11 +867,14 @@ a:hover {
 }
 
 .dash-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   padding: 1.5rem;
   margin-bottom: 1.25rem;
+  box-shadow: var(--glass-shadow);
 }
 
 .dash-card h3 {
@@ -820,13 +894,16 @@ a:hover {
 }
 
 .dash-stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius);
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
+  box-shadow: var(--glass-shadow);
 }
 
 .dash-stat-label {
@@ -884,10 +961,12 @@ a:hover {
   white-space: pre-wrap;
   color: var(--text-muted);
   margin: 0;
-  background: var(--bg);
+  background: rgba(12, 11, 9, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: 8px;
   padding: 1rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--glass-border-subtle);
 }
 
 .dash-dl {
@@ -982,8 +1061,10 @@ a:hover {
 .dash-toggle--card {
   justify-content: space-between;
   padding: 1rem;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: rgba(12, 11, 9, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border-subtle);
   border-radius: 8px;
 }
 
