@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { api, ApiError, type Plan, type SubscriptionStatus } from '../../api/client';
 import { useAuth } from '../../context/AuthContext';
 
@@ -40,7 +39,7 @@ export function Subscription() {
     <div className="dash-page">
       <header className="dash-header">
         <h1>Subscription</h1>
-        <p>Your plan determines which agents and features Viin can use for you.</p>
+        <p>Your plan determines which features Viin can use for you.</p>
       </header>
 
       {error && <div className="alert alert-error">{error}</div>}
@@ -56,7 +55,7 @@ export function Subscription() {
                 <p className="dash-muted">
                   {sub.has_active_subscription
                     ? `${sub.days_remaining} days remaining · ${sub.status}`
-                    : 'Subscribe to unlock more agents and features'}
+                    : 'Subscribe to unlock more features'}
                 </p>
               </div>
               {sub.has_active_subscription && sub.plan_price != null && (
@@ -77,19 +76,6 @@ export function Subscription() {
               </div>
             )}
 
-            {sub.agents && sub.agents.length > 0 && (
-              <div>
-                <h4>Entitled agents</h4>
-                <div className="dash-tag-list">
-                  {sub.agents.map((a) => (
-                    <span key={a} className="dash-badge">{a.replace(/_/g, ' ')}</span>
-                  ))}
-                </div>
-                <Link to="/dashboard/agents" className="dash-link">
-                  Configure agents →
-                </Link>
-              </div>
-            )}
           </section>
 
           <section className="dash-card">

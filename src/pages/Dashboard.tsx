@@ -3,7 +3,6 @@ import { DashboardLayout } from '../components/DashboardLayout';
 import { Overview } from './dashboard/Overview';
 import { ProfileSettings } from './dashboard/ProfileSettings';
 import { Tasks } from './dashboard/Tasks';
-import { Agents } from './dashboard/Agents';
 import { Notifications } from './dashboard/Notifications';
 import { Memory } from './dashboard/Memory';
 import { Briefings } from './dashboard/Briefings';
@@ -17,7 +16,6 @@ export function Dashboard() {
         <Route index element={<Overview />} />
         <Route path="profile" element={<ProfileSettings />} />
         <Route path="tasks" element={<Tasks />} />
-        <Route path="agents" element={<Agents />} />
         <Route path="notifications" element={<Notifications />} />
         <Route path="memory" element={<Memory />} />
         <Route path="briefings" element={<Briefings />} />

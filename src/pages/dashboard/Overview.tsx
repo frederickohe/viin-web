@@ -76,9 +76,6 @@ export function Overview() {
             <Link to="/dashboard/tasks" className="btn btn-outline btn-sm">
               Add task or reminder
             </Link>
-            <Link to="/dashboard/agents" className="btn btn-outline btn-sm">
-              Configure agents
-            </Link>
             <Link to="/chat" className="btn btn-primary btn-sm">
               Open task chat
             </Link>

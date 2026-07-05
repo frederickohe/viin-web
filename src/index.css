@@ -1216,49 +1216,6 @@ a:hover {
   font-size: 0.95rem;
 }
 
-.dash-agent-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.25rem;
-}
-
-.dash-agent-card--locked {
-  opacity: 0.65;
-}
-
-.dash-agent-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.dash-agent-head h3 {
-  margin: 0;
-}
-
-.dash-status {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.5rem;
-  border-radius: 999px;
-}
-
-.dash-status--active {
-  background: rgba(111, 207, 151, 0.15);
-  color: #6fcf97;
-}
-
-.dash-status--inactive {
-  background: var(--bg-elevated);
-  color: var(--text-muted);
-}
-
-.dash-status--locked {
-  background: rgba(232, 93, 93, 0.12);
-  color: #f0a0a0;
-}
-
 .dash-inline-actions {
   display: flex;
   gap: 0.5rem;

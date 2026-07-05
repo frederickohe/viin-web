@@ -5,7 +5,6 @@ const NAV = [
   { to: '/dashboard', label: 'Overview', end: true },
   { to: '/dashboard/profile', label: 'Profile' },
   { to: '/dashboard/tasks', label: 'Tasks' },
-  { to: '/dashboard/agents', label: 'Agents' },
   { to: '/dashboard/notifications', label: 'Notifications' },
   { to: '/dashboard/memory', label: 'Memory' },
   { to: '/dashboard/briefings', label: 'Briefings' },

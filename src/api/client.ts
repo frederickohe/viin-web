@@ -84,16 +84,6 @@ export interface SubscriptionStatus {
   status: string;
 }
 
-export interface AgentConfig {
-  params?: Record<string, string>;
-  status?: string;
-}
-
-export interface UserAgents {
-  agents: Record<string, AgentConfig>;
-  available_agents: string[];
-}
-
 export interface ChatChannels {
   telegram: {
     connected: boolean;
@@ -285,15 +275,6 @@ export const api = {
     request<UserProfile>('/api/v1/user/me/notification-settings', {
       method: 'PATCH',
       body: JSON.stringify(payload),
-    }, token),
-
-  getAgents: (token: string) =>
-    request<UserAgents>('/api/v1/user/me/agents', {}, token),
-
-  updateAgent: (token: string, agentName: string, params: Record<string, string>, status?: string) =>
-    request<UserAgents>(`/api/v1/user/me/agents/${agentName}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ params, status }),
     }, token),
 
   getChatChannels: (token: string) =>
