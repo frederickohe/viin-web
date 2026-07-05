@@ -212,7 +212,13 @@ async function request<T>(
     let detail = res.statusText;
     try {
       const body = await res.json();
-      detail = body.detail || body.message || JSON.stringify(body);
+      if (typeof body.detail === 'string') {
+        detail = body.detail;
+      } else if (Array.isArray(body.detail)) {
+        detail = body.detail.map((item: { msg?: string }) => item.msg).filter(Boolean).join('. ');
+      } else {
+        detail = body.message || JSON.stringify(body);
+      }
     } catch {
       /* ignore */
     }

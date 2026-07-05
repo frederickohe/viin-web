@@ -103,7 +103,11 @@ export function Chat() {
       ]);
       lastSeenRef.current = new Date().toISOString();
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Failed to send message.');
+      const message =
+        err instanceof ApiError
+          ? err.message
+          : 'Failed to send message. Please try again.';
+      setError(message);
     } finally {
       setSending(false);
     }
