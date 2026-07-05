@@ -11,7 +11,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <div className={`app-shell${isChat ? ' app-shell--chat' : ''}${isDashboard ? ' app-shell--dashboard' : ''}`}>
       <header className="site-header">
         <Link to="/" className="brand">
-          <span className="brand-mark">V</span>
+          <img src="/viin-logo.png" alt="" className="brand-mark" width={28} height={28} />
           <span className="brand-name">Viin</span>
         </Link>
         <nav className="site-nav">
