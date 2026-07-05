@@ -13,7 +13,7 @@ interface Message {
 const REMINDER_POLL_MS = 20_000;
 
 export function Chat() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 'welcome',
@@ -32,7 +32,7 @@ export function Chat() {
   }, [messages]);
 
   useEffect(() => {
-    if (!user?.phone) return;
+    if (!token) return;
 
     if (!lastSeenRef.current) {
       lastSeenRef.current = new Date().toISOString();
@@ -40,12 +40,10 @@ export function Chat() {
 
     let cancelled = false;
 
-    const phone = user.phone;
-
     async function pollReminders() {
-      if (cancelled || sending || !phone) return;
+      if (cancelled || sending || !token) return;
       try {
-        const res = await api.getChatUpdates(phone, lastSeenRef.current || undefined);
+        const res = await api.getChatUpdates(token, lastSeenRef.current || undefined);
         const incoming = res.messages || [];
         if (!incoming.length) return;
 
@@ -79,12 +77,12 @@ export function Chat() {
       cancelled = true;
       window.clearInterval(timer);
     };
-  }, [user?.phone, sending]);
+  }, [token, sending]);
 
   async function handleSend(e: FormEvent) {
     e.preventDefault();
     const text = input.trim();
-    if (!text || sending || !user?.phone) return;
+    if (!text || sending || !token) return;
 
     setInput('');
     setError('');
@@ -94,7 +92,7 @@ export function Chat() {
     setMessages((prev) => [...prev, userMsg]);
 
     try {
-      const res = await api.sendMessage(user.phone, text);
+      const res = await api.sendMessage(token, text);
       const reply =
         typeof res.response === 'string'
           ? res.response

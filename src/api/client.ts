@@ -351,16 +351,25 @@ export const api = {
   getWeeklyBriefing: (token: string) =>
     request<Briefing>('/api/v1/memory/briefing/weekly', {}, token),
 
-  sendMessage: (phone: string, message: string) =>
-    request<ChatResponse>('/api/v1/nlu/process', {
-      method: 'POST',
-      body: JSON.stringify({ phone, message }),
-    }),
+  sendMessage: (token: string, message: string) =>
+    request<ChatResponse>(
+      '/api/v1/nlu/process',
+      {
+        method: 'POST',
+        body: JSON.stringify({ message }),
+      },
+      token,
+    ),
 
-  getChatUpdates: (phone: string, since?: string) => {
-    const params = new URLSearchParams({ phone });
+  getChatUpdates: (token: string, since?: string) => {
+    const params = new URLSearchParams();
     if (since) params.set('since', since);
-    return request<ChatUpdatesResponse>(`/api/v1/nlu/chat-updates?${params.toString()}`);
+    const qs = params.toString();
+    return request<ChatUpdatesResponse>(
+      `/api/v1/nlu/chat-updates${qs ? `?${qs}` : ''}`,
+      {},
+      token,
+    );
   },
 
   getGoogleCalendarStatus: (token: string) =>
