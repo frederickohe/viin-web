@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react';
 import { api, ApiError, type Briefing } from '../../api/client';
 import { useAuth } from '../../context/AuthContext';
 
+type BriefingTab = 'daily' | 'weekly' | 'monthly';
+
 export function Briefings() {
   const { token } = useAuth();
   const [daily, setDaily] = useState<Briefing | null>(null);
   const [weekly, setWeekly] = useState<Briefing | null>(null);
+  const [monthly, setMonthly] = useState<Briefing | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [tab, setTab] = useState<'daily' | 'weekly'>('daily');
+  const [tab, setTab] = useState<BriefingTab>('daily');
 
   useEffect(() => {
     if (!token) return;
@@ -17,13 +20,15 @@ export function Briefings() {
     (async () => {
       setLoading(true);
       try {
-        const [d, w] = await Promise.all([
+        const [d, w, m] = await Promise.all([
           api.getDailyBriefing(token),
           api.getWeeklyBriefing(token),
+          api.getMonthlyBriefing(token),
         ]);
         if (!cancelled) {
           setDaily(d);
           setWeekly(w);
+          setMonthly(m);
         }
       } catch (err) {
         if (!cancelled) setError(err instanceof ApiError ? err.message : 'Failed to load briefings');
@@ -37,15 +42,21 @@ export function Briefings() {
     };
   }, [token]);
 
-  const active = tab === 'daily' ? daily : weekly;
+  const byTab: Record<BriefingTab, Briefing | null> = {
+    daily,
+    weekly,
+    monthly,
+  };
+  const active = byTab[tab];
 
   return (
     <div className="dash-page">
       <header className="dash-header">
         <h1>Briefings</h1>
         <p>
-          Preview what Viin will include in your daily and weekly task summaries.
-          Ask for a briefing in chat with &ldquo;daily briefing&rdquo; or &ldquo;weekly briefing&rdquo;.
+          Preview what Viin will include in your daily, weekly, and monthly task summaries.
+          Ask for a briefing in chat with &ldquo;daily briefing&rdquo;, &ldquo;weekly briefing&rdquo;,
+          or &ldquo;monthly overview&rdquo;.
         </p>
       </header>
 
@@ -65,6 +76,13 @@ export function Briefings() {
           onClick={() => setTab('weekly')}
         >
           Weekly {weekly ? `(${weekly.item_count})` : ''}
+        </button>
+        <button
+          type="button"
+          className={`dash-tab${tab === 'monthly' ? ' dash-tab--active' : ''}`}
+          onClick={() => setTab('monthly')}
+        >
+          Monthly {monthly ? `(${monthly.item_count})` : ''}
         </button>
       </div>
 

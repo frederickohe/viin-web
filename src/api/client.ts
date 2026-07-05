@@ -355,6 +355,9 @@ export const api = {
   getWeeklyBriefing: (token: string) =>
     request<Briefing>('/api/v1/memory/briefing/weekly', {}, token),
 
+  getMonthlyBriefing: (token: string) =>
+    request<Briefing>('/api/v1/memory/briefing/monthly', {}, token),
+
   sendMessage: (token: string, message: string) =>
     request<ChatResponse>(
       '/api/v1/nlu/process',
