@@ -8,6 +8,7 @@ import { Memory } from './dashboard/Memory';
 import { Briefings } from './dashboard/Briefings';
 import { Subscription } from './dashboard/Subscription';
 import { Integrations } from './dashboard/Integrations';
+import { TradingBot } from './dashboard/TradingBot';
 
 export function Dashboard() {
   return (
@@ -21,6 +22,7 @@ export function Dashboard() {
         <Route path="briefings" element={<Briefings />} />
         <Route path="subscription" element={<Subscription />} />
         <Route path="integrations" element={<Integrations />} />
+        <Route path="trading-bot" element={<TradingBot />} />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Route>
     </Routes>

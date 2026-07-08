@@ -178,6 +178,42 @@ export interface GoogleCalendarSyncResult {
   reminders_cancelled: number;
 }
 
+export interface TradingStatus {
+  running: boolean;
+  interval_seconds: number;
+  alpaca_configured: boolean;
+  storage_path: string;
+}
+
+export interface TradingEquity {
+  symbol: string;
+  position: number;
+  entry_price: number;
+  drawdown: number;
+  status: 'On' | 'Off';
+  levels: Record<string, number>;
+}
+
+export interface TradingEquitiesResponse {
+  equities: TradingEquity[];
+}
+
+export interface TradingEquityCreatePayload {
+  symbol: string;
+  levels: number;
+  drawdown_percent: number;
+}
+
+export interface TradingEquityToggleResponse {
+  symbol: string;
+  status: 'On' | 'Off';
+}
+
+export interface TradingChatResponse {
+  response: string;
+  success: boolean;
+}
+
 class ApiError extends Error {
   status: number;
 
@@ -395,6 +431,40 @@ export const api = {
   disconnectGoogleCalendar: (token: string) =>
     request<{ message: string }>('/api/v1/integrations/google-calendar/disconnect', {
       method: 'DELETE',
+    }, token),
+
+  getTradingStatus: (token: string) =>
+    request<TradingStatus>('/api/v1/trading/status', {}, token),
+
+  getTradingEquities: (token: string) =>
+    request<TradingEquitiesResponse>('/api/v1/trading/equities', {}, token),
+
+  addTradingEquity: (token: string, payload: TradingEquityCreatePayload) =>
+    request<TradingEquity>('/api/v1/trading/equities', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }, token),
+
+  toggleTradingEquity: (token: string, symbol: string) =>
+    request<TradingEquityToggleResponse>(`/api/v1/trading/equities/${encodeURIComponent(symbol)}/toggle`, {
+      method: 'POST',
+    }, token),
+
+  removeTradingEquity: (token: string, symbol: string) =>
+    request<{ message: string }>(`/api/v1/trading/equities/${encodeURIComponent(symbol)}`, {
+      method: 'DELETE',
+    }, token),
+
+  startTradingBot: (token: string) =>
+    request<{ message: string }>('/api/v1/trading/start', { method: 'POST' }, token),
+
+  stopTradingBot: (token: string) =>
+    request<{ message: string }>('/api/v1/trading/stop', { method: 'POST' }, token),
+
+  tradingChat: (token: string, payload: { message: string }) =>
+    request<TradingChatResponse>('/api/v1/trading/chat', {
+      method: 'POST',
+      body: JSON.stringify(payload),
     }, token),
 
   signOut: (token: string) =>

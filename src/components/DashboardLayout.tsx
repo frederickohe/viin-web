@@ -10,6 +10,7 @@ const NAV = [
   { to: '/dashboard/briefings', label: 'Briefings' },
   { to: '/dashboard/subscription', label: 'Subscription' },
   { to: '/dashboard/integrations', label: 'Integrations' },
+  { to: '/dashboard/trading-bot', label: 'Trading Bot' },
 ];
 
 export function DashboardLayout() {
