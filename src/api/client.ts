@@ -214,6 +214,21 @@ export interface TradingChatResponse {
   success: boolean;
 }
 
+export interface MarketBar {
+  t: string;
+  o: number;
+  h: number;
+  l: number;
+  c: number;
+  v: number;
+}
+
+export interface MarketBarsResponse {
+  symbol: string;
+  timeframe: string;
+  bars: MarketBar[];
+}
+
 class ApiError extends Error {
   status: number;
 
@@ -466,6 +481,37 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(payload),
     }, token),
+
+  getMarketBars: (
+    token: string,
+    symbol: string,
+    opts?: { timeframe?: string; limit?: number; start?: string; end?: string },
+  ) => {
+    const params = new URLSearchParams();
+    if (opts?.timeframe) params.set('timeframe', opts.timeframe);
+    if (opts?.limit) params.set('limit', String(opts.limit));
+    if (opts?.start) params.set('start', opts.start);
+    if (opts?.end) params.set('end', opts.end);
+    const qs = params.toString();
+    return request<MarketBarsResponse>(
+      `/api/v1/trading/market/bars/${encodeURIComponent(symbol)}${qs ? `?${qs}` : ''}`,
+      {},
+      token,
+    );
+  },
+
+  exportMarketBarsUrl: (
+    symbol: string,
+    opts?: { format?: 'csv' | 'json'; timeframe?: string; limit?: number; start?: string; end?: string },
+  ) => {
+    const params = new URLSearchParams();
+    params.set('format', opts?.format ?? 'csv');
+    if (opts?.timeframe) params.set('timeframe', opts.timeframe);
+    if (opts?.limit) params.set('limit', String(opts.limit));
+    if (opts?.start) params.set('start', opts.start);
+    if (opts?.end) params.set('end', opts.end);
+    return `${API_URL}/api/v1/trading/market/bars/${encodeURIComponent(symbol)}/export?${params.toString()}`;
+  },
 
   signOut: (token: string) =>
     request('/api/v1/auth/signout', { method: 'POST' }, token),

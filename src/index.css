@@ -929,6 +929,43 @@ a:hover {
   gap: 1.25rem;
 }
 
+.dash-grid--trading {
+  grid-template-columns: 2fr 1fr;
+  align-items: start;
+}
+
+.dash-inline-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.dash-inline-field select {
+  padding: 0.45rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(12, 11, 9, 0.65);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.9rem;
+}
+
+.dash-inline-field select:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px var(--gold-glow);
+}
+
+.trading-chart {
+  margin-top: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border-subtle);
+  background: rgba(12, 11, 9, 0.4);
+  overflow: hidden;
+}
+
 .dash-actions {
   display: flex;
   flex-wrap: wrap;
@@ -1311,6 +1348,10 @@ a:hover {
   }
 
   .dash-split {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-grid--trading {
     grid-template-columns: 1fr;
   }
 }
