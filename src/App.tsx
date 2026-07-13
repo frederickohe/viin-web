@@ -7,6 +7,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Landing } from './pages/Landing';
 import { SignIn } from './pages/SignIn';
 import { SignUp } from './pages/SignUp';
+import { TradingLanding } from './pages/TradingLanding';
 import { VerifyOtp } from './pages/VerifyOtp';
 
 export default function App() {
@@ -16,6 +17,7 @@ export default function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/trading" element={<TradingLanding />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
             <Route path="/verify" element={<VerifyOtp />} />

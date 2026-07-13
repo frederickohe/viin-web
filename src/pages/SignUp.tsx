@@ -1,11 +1,21 @@
-import { type FormEvent, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { api, ApiError } from '../api/client';
+import { type FormEvent, useMemo, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { api, ApiError, type ViinService } from '../api/client';
+import { parseServiceParam, serviceLabel } from '../lib/services';
 
 export function SignUp() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const service = useMemo(
+    () => parseServiceParam(searchParams.get('service')),
+    [searchParams],
+  );
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  function setService(next: ViinService) {
+    setSearchParams({ service: next });
+  }
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -21,8 +31,9 @@ export function SignUp() {
         email: String(form.get('email') || '').trim(),
         phone,
         password: String(form.get('password') || ''),
+        services: [service],
       });
-      navigate('/verify', { state: { phone } });
+      navigate('/verify', { state: { phone, service } });
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Sign up failed. Please try again.');
     } finally {
@@ -34,7 +45,28 @@ export function SignUp() {
     <div className="auth-page">
       <div className="auth-card">
         <h1>Create your account</h1>
-        <p className="auth-sub">Set up your personal task assistant in a few steps.</p>
+        <p className="auth-sub">
+          One signup for Viin — choose the service you want to start with.
+        </p>
+
+        <div className="product-switch" role="tablist" aria-label="Service">
+          <button
+            type="button"
+            className={service === 'assistant' ? 'is-active' : ''}
+            onClick={() => setService('assistant')}
+          >
+            Task Assistant
+          </button>
+          <button
+            type="button"
+            className={service === 'trading' ? 'is-active' : ''}
+            onClick={() => setService('trading')}
+          >
+            Trading Bot
+          </button>
+        </div>
+
+        <span className="auth-service-pill">{serviceLabel(service)}</span>
 
         {error && <div className="alert alert-error">{error}</div>}
 
@@ -71,12 +103,12 @@ export function SignUp() {
             />
           </label>
           <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-            {loading ? 'Creating account…' : 'Create account'}
+            {loading ? 'Creating account…' : `Create ${serviceLabel(service)} account`}
           </button>
         </form>
 
         <p className="auth-footer">
-          Already have an account? <Link to="/signin">Sign in</Link>
+          Already have an account? <Link to={`/signin?service=${service}`}>Sign in</Link>
         </p>
       </div>
     </div>

@@ -5,7 +5,9 @@ import { api, ApiError } from '../api/client';
 export function VerifyOtp() {
   const navigate = useNavigate();
   const location = useLocation();
-  const phoneFromState = (location.state as { phone?: string } | null)?.phone || '';
+  const state = (location.state as { phone?: string; service?: string } | null) || {};
+  const phoneFromState = state.phone || '';
+  const service = state.service === 'trading' ? 'trading' : 'assistant';
   const [phone, setPhone] = useState(phoneFromState);
   const [error, setError] = useState('');
   const [info, setInfo] = useState('');
@@ -26,7 +28,7 @@ export function VerifyOtp() {
         setError(res.message || 'Invalid OTP');
         return;
       }
-      navigate('/signin', { state: { verified: true } });
+      navigate(`/signin?service=${service}`, { state: { verified: true } });
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Verification failed.');
     } finally {

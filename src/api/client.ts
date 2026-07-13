@@ -1,10 +1,13 @@
 const API_URL = import.meta.env.VITE_API_URL ?? '';
 
+export type ViinService = 'assistant' | 'trading';
+
 export interface SignUpPayload {
   fullname: string;
   email: string;
   phone: string;
   password: string;
+  services?: ViinService[];
 }
 
 export interface SignUpResponse {
@@ -38,6 +41,7 @@ export interface UserProfile {
   profile_sharing?: boolean;
   in_app_notification?: boolean;
   sms_notification?: boolean;
+  services?: ViinService[];
   enabled: boolean;
   status?: string;
 }
@@ -315,6 +319,12 @@ export const api = {
 
   getMe: (token: string) =>
     request<UserProfile>('/api/v1/user/me', {}, token),
+
+  enrollServices: (token: string, services: ViinService[]) =>
+    request<UserProfile>('/api/v1/user/me/services', {
+      method: 'POST',
+      body: JSON.stringify({ services }),
+    }, token),
 
   updateMe: (token: string, payload: UserUpdatePayload) =>
     request<UserProfile>('/api/v1/user/me', {

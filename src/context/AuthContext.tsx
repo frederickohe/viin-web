@@ -13,7 +13,7 @@ interface AuthState {
   token: string | null;
   user: UserProfile | null;
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<UserProfile>;
   signOut: () => Promise<void>;
   refreshUser: () => Promise<void>;
   setToken: (token: string) => void;
@@ -76,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(res.access_token);
       const profile = await api.getMe(res.access_token);
       setUser(profile);
+      return profile;
     },
     [setToken],
   );

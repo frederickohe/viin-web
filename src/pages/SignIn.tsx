@@ -1,12 +1,18 @@
-import { type FormEvent, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { type FormEvent, useMemo, useState } from 'react';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { ApiError } from '../api/client';
 import { useAuth } from '../context/AuthContext';
+import { defaultDashboardPath, parseServiceParam, serviceLabel } from '../lib/services';
 
 export function SignIn() {
   const { signIn } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const serviceHint = useMemo(
+    () => parseServiceParam(searchParams.get('service')),
+    [searchParams],
+  );
   const verified = (location.state as { verified?: boolean } | null)?.verified;
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,11 +25,15 @@ export function SignIn() {
     const form = new FormData(e.currentTarget);
 
     try {
-      await signIn(
+      const profile = await signIn(
         String(form.get('email') || '').trim(),
         String(form.get('password') || ''),
       );
-      navigate('/dashboard');
+      if (serviceHint === 'trading') {
+        navigate('/dashboard/trading-bot');
+      } else {
+        navigate(defaultDashboardPath(profile));
+      }
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Invalid email or password.');
     } finally {
@@ -35,7 +45,10 @@ export function SignIn() {
     <div className="auth-page">
       <div className="auth-card">
         <h1>Welcome back</h1>
-        <p className="auth-sub">Sign in to your personal task assistant.</p>
+        <p className="auth-sub">
+          Sign in to your Viin account
+          {serviceHint === 'trading' ? ` · ${serviceLabel('trading')}` : ''}.
+        </p>
 
         {verified && (
           <div className="alert alert-info">Phone verified! You can sign in now.</div>
@@ -64,7 +77,7 @@ export function SignIn() {
         </form>
 
         <p className="auth-footer">
-          New here? <Link to="/signup">Create an account</Link>
+          New here? <Link to={`/signup?service=${serviceHint}`}>Create an account</Link>
         </p>
       </div>
     </div>

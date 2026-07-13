@@ -42,26 +42,36 @@ export function TradingChart({
       height,
       layout: {
         background: { color: 'transparent' },
-        textColor: 'rgba(245, 240, 232, 0.82)',
+        textColor: 'rgba(26, 28, 31, 0.72)',
       },
       grid: {
-        vertLines: { color: 'rgba(255,255,255,0.06)' },
-        horzLines: { color: 'rgba(255,255,255,0.06)' },
+        vertLines: { color: 'rgba(26, 28, 31, 0.06)' },
+        horzLines: { color: 'rgba(26, 28, 31, 0.06)' },
       },
-      rightPriceScale: { borderColor: 'rgba(255,255,255,0.08)' },
-      timeScale: { borderColor: 'rgba(255,255,255,0.08)' },
-      crosshair: { vertLine: { color: 'rgba(212,168,83,0.35)' }, horzLine: { color: 'rgba(212,168,83,0.35)' } },
+      rightPriceScale: { borderColor: 'rgba(26, 28, 31, 0.1)' },
+      timeScale: { borderColor: 'rgba(26, 28, 31, 0.1)' },
+      crosshair: {
+        vertLine: { color: 'rgba(180, 83, 9, 0.35)' },
+        horzLine: { color: 'rgba(180, 83, 9, 0.35)' },
+      },
       watermark: watermark
-        ? { visible: true, fontSize: 22, horzAlign: 'left', vertAlign: 'top', color: 'rgba(212,168,83,0.16)', text: watermark }
+        ? {
+            visible: true,
+            fontSize: 22,
+            horzAlign: 'left',
+            vertAlign: 'top',
+            color: 'rgba(180, 83, 9, 0.18)',
+            text: watermark,
+          }
         : { visible: false },
     });
 
     const candleSeries = chart.addCandlestickSeries({
-      upColor: 'rgba(111, 207, 151, 0.85)',
-      downColor: 'rgba(232, 93, 93, 0.85)',
+      upColor: 'rgba(5, 150, 105, 0.85)',
+      downColor: 'rgba(220, 38, 38, 0.85)',
       borderVisible: false,
-      wickUpColor: 'rgba(111, 207, 151, 0.85)',
-      wickDownColor: 'rgba(232, 93, 93, 0.85)',
+      wickUpColor: 'rgba(5, 150, 105, 0.85)',
+      wickDownColor: 'rgba(220, 38, 38, 0.85)',
     });
 
     candleSeries.setData(seriesData);

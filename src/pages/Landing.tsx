@@ -9,7 +9,7 @@ const FEATURES = [
   },
   {
     title: 'Daily briefings',
-    desc: 'Wake up to a summary of what\'s ahead. Viin tracks your priorities and keeps you on schedule.',
+    desc: "Wake up to a summary of what's ahead. Viin tracks your priorities and keeps you on schedule.",
   },
   {
     title: 'Remembers you',
@@ -39,17 +39,46 @@ export function Landing() {
             stay on top of your day
           </h1>
           <p className="hero-lead">
-            Sign up in minutes and let Viin manage your tasks, reminders, and daily
-            priorities — so you can focus on what matters.
+            A bright, calm place for tasks, reminders, and daily priorities — so you can focus on what
+            matters.
           </p>
           <div className="hero-actions">
-            <Link to="/signup" className="btn btn-primary btn-lg">
+            <Link to="/signup?service=assistant" className="btn btn-primary btn-lg">
               Create free account
             </Link>
             <Link to="/signin" className="btn btn-outline btn-lg">
               I have an account
             </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="services-band">
+        <h2>Choose your service</h2>
+        <p>One account. Two products. Sign up for what you need.</p>
+        <div className="services-grid">
+          <article className="service-card">
+            <p className="service-card__eyebrow">Core</p>
+            <h3>Task Assistant</h3>
+            <p>
+              Reminders, briefings, memory, and chat — your everyday operating system for getting
+              things done.
+            </p>
+            <Link to="/signup?service=assistant" className="btn btn-primary">
+              Get Task Assistant
+            </Link>
+          </article>
+          <article className="service-card">
+            <p className="service-card__eyebrow">Markets</p>
+            <h3>Trading Bot</h3>
+            <p>
+              A separate trading co-pilot with equities, charts, and bot controls — still on the same
+              Viin signup.
+            </p>
+            <Link to="/trading" className="btn btn-outline">
+              Explore Trading Bot
+            </Link>
+          </article>
         </div>
       </section>
 
@@ -79,7 +108,7 @@ export function Landing() {
                     <li key={feat}>{feat}</li>
                   ))}
                 </ul>
-                <Link to="/signup" className="btn btn-outline btn-block">
+                <Link to="/signup?service=assistant" className="btn btn-outline btn-block">
                   Get started
                 </Link>
               </article>
@@ -91,7 +120,7 @@ export function Landing() {
       <section className="cta-band">
         <h2>Ready to simplify your day?</h2>
         <p>Join others who trust Viin as their personal task assistant.</p>
-        <Link to="/signup" className="btn btn-primary btn-lg">
+        <Link to="/signup?service=assistant" className="btn btn-primary btn-lg">
           Sign up free
         </Link>
       </section>

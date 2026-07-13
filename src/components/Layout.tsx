@@ -1,11 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { hasService } from '../lib/services';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { token, user, signOut } = useAuth();
   const location = useLocation();
   const isChat = location.pathname === '/chat';
   const isDashboard = location.pathname.startsWith('/dashboard');
+  const isTradingMarketing = location.pathname === '/trading';
+  const showChat = !token || hasService(user, 'assistant');
 
   return (
     <div className={`app-shell${isChat ? ' app-shell--chat' : ''}${isDashboard ? ' app-shell--dashboard' : ''}`}>
@@ -20,9 +23,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <Link to="/dashboard" className="nav-link">
                 Dashboard
               </Link>
-              <Link to="/chat" className="nav-link">
-                Chat
-              </Link>
+              {showChat && (
+                <Link to="/chat" className="nav-link">
+                  Chat
+                </Link>
+              )}
               <span className="nav-user">{user?.fullname?.split(' ')[0]}</span>
               <button type="button" className="btn btn-ghost" onClick={() => signOut()}>
                 Sign out
@@ -30,10 +35,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </>
           ) : (
             <>
+              {!isTradingMarketing && (
+                <Link to="/trading" className="nav-link">
+                  Trading Bot
+                </Link>
+              )}
               <Link to="/signin" className="nav-link">
                 Sign in
               </Link>
-              <Link to="/signup" className="btn btn-primary btn-sm">
+              <Link
+                to={isTradingMarketing ? '/signup?service=trading' : '/signup?service=assistant'}
+                className="btn btn-primary btn-sm"
+              >
                 Get started
               </Link>
             </>
