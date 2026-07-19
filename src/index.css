@@ -1234,6 +1234,10 @@ a:hover {
   color: var(--gold);
 }
 
+.dash-badge--muted {
+  opacity: 0.85;
+}
+
 .dash-badge--current {
   background: var(--gold-glow);
   border-color: var(--gold-dim);

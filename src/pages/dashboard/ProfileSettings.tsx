@@ -3,7 +3,7 @@ import { api, ApiError } from '../../api/client';
 import { useAuth } from '../../context/AuthContext';
 
 export function ProfileSettings() {
-  const { token, user, refreshUser } = useAuth();
+  const { token, user, refreshUser, setUser } = useAuth();
   const [saving, setSaving] = useState(false);
   const [disconnecting, setDisconnecting] = useState(false);
   const [error, setError] = useState('');
@@ -63,7 +63,8 @@ export function ProfileSettings() {
     setError('');
     setSuccess('');
     try {
-      await api.updateMe(token, form);
+      const updated = await api.updateMe(token, form);
+      setUser(updated);
       await refreshUser();
       setSuccess('Profile updated. Your task assistant will use this context in conversations.');
     } catch (err) {

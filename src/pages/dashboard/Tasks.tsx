@@ -19,6 +19,7 @@ export function Tasks() {
 
   const [reminderBody, setReminderBody] = useState('');
   const [reminderDue, setReminderDue] = useState('');
+  const [excludeFromPeriodBriefings, setExcludeFromPeriodBriefings] = useState(false);
   const [newListName, setNewListName] = useState('');
   const [newTodoText, setNewTodoText] = useState('');
   const [selectedListId, setSelectedListId] = useState('');
@@ -55,10 +56,16 @@ export function Tasks() {
       await api.createReminder(token, {
         body: reminderBody,
         due_at: new Date(reminderDue).toISOString(),
-        delivery: { channels: ['chat'] },
+        delivery: {
+          channels: ['chat'],
+          ...(excludeFromPeriodBriefings
+            ? { exclude_from_period_briefings: true }
+            : {}),
+        },
       });
       setReminderBody('');
       setReminderDue('');
+      setExcludeFromPeriodBriefings(false);
       await load();
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Failed to create reminder');
@@ -169,6 +176,14 @@ export function Tasks() {
                   required
                 />
               </label>
+              <label className="dash-toggle">
+                <input
+                  type="checkbox"
+                  checked={excludeFromPeriodBriefings}
+                  onChange={(e) => setExcludeFromPeriodBriefings(e.target.checked)}
+                />
+                <span>Exclude from weekly & monthly briefings (one-time only)</span>
+              </label>
               <button type="submit" className="btn btn-primary btn-sm" disabled={saving}>
                 Create reminder
               </button>
@@ -190,6 +205,15 @@ export function Tasks() {
                       {r.title && <p className="dash-muted">{r.body}</p>}
                       <span className="dash-badge">{formatDate(r.due_at)}</span>
                       {r.rrule && <span className="dash-badge dash-badge--recurring">Recurring</span>}
+                      {!r.rrule &&
+                        Boolean(
+                          (r.delivery as { exclude_from_period_briefings?: boolean } | undefined)
+                            ?.exclude_from_period_briefings,
+                        ) && (
+                          <span className="dash-badge dash-badge--muted">
+                            Excluded from weekly/monthly
+                          </span>
+                        )}
                     </div>
                     <button
                       type="button"

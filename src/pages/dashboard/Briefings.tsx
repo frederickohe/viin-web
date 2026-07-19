@@ -55,6 +55,7 @@ export function Briefings() {
         <h1>Briefings</h1>
         <p>
           Preview what Viin will include in your daily, weekly, and monthly task summaries.
+          One-time reminders can be excluded from weekly/monthly on the Tasks page.
           Ask for a briefing in chat with &ldquo;daily briefing&rdquo;, &ldquo;weekly briefing&rdquo;,
           or &ldquo;monthly overview&rdquo;.
         </p>
